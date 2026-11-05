@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WAS 연결 실패 · 3-Tier 로그인 서비스</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="logo">3T</span>3-Tier Login Service</a>
+  </header>
+  <main class="container">
+    <section class="card wide" style="max-width:640px">
+      <h1>WAS(Application Tier)에 연결할 수 없습니다</h1>
+      <p class="sub">이 페이지는 Web Tier(Nginx)가 직접 응답한 것입니다. Nginx 는 정상이지만
+        뒤쪽의 Gunicorn/Flask(127.0.0.1:8000)가 응답하지 않습니다. (502/503/504)</p>
+      <div class="alert alert-info">VM 터미널에서 아래 명령으로 WAS 상태를 확인하세요.</div>
+      <div class="cmd">sudo systemctl status loginapp
+sudo journalctl -u loginapp -n 50 --no-pager
+sudo systemctl restart loginapp</div>
+    </section>
+  </main>
+  <footer class="footer">served by Nginx (Web Tier)</footer>
+</body>
+</html>

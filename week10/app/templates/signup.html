@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}회원가입 · 3-Tier 로그인 서비스{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>회원가입</h1>
+  <p class="sub">가입한 정보는 DB Tier(MariaDB)의 <code>users</code> 테이블에 저장됩니다.</p>
+  {% include "_flashes.html" %}
+  <form method="post" action="/signup" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="username">아이디 <small>영문/숫자/밑줄 4~20자</small></label>
+    <input id="username" name="username" type="text" value="{{ username or '' }}"
+           pattern="[A-Za-z0-9_]{4,20}" maxlength="20" autocomplete="username" required autofocus>
+    <label for="name">이름</label>
+    <input id="name" name="name" type="text" value="{{ name or '' }}" maxlength="30" required>
+    <label for="password">비밀번호 <small>8자 이상, 영문+숫자</small></label>
+    <input id="password" name="password" type="password" minlength="8" maxlength="64"
+           autocomplete="new-password" required>
+    <label for="password_confirm">비밀번호 확인</label>
+    <input id="password_confirm" name="password_confirm" type="password" minlength="8"
+           maxlength="64" autocomplete="new-password" required>
+    <button type="submit" class="btn">가입하기</button>
+  </form>
+  <p class="switch">이미 계정이 있으신가요? <a href="/login">로그인</a></p>
+</section>
+{% endblock %}
