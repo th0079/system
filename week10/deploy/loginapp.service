@@ -1,0 +1,26 @@
+# WAS Tier 서비스 : Gunicorn 으로 Flask 앱을 실행 (부팅 시 자동 시작)
+# 설치 위치 : /etc/systemd/system/loginapp.service   (deploy/setup.sh 가 자동 복사)
+# 확인     : systemctl status loginapp  /  journalctl -u loginapp -f
+[Unit]
+Description=loginapp WAS tier (Gunicorn + Flask)
+After=network.target mariadb.service
+Wants=mariadb.service
+
+[Service]
+Type=simple
+User=loginapp
+Group=loginapp
+WorkingDirectory=/opt/loginapp/app
+EnvironmentFile=/etc/loginapp/loginapp.env
+ExecStart=/opt/loginapp/venv/bin/gunicorn --config /opt/loginapp/app/gunicorn.conf.py app:app
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=3
+# 보안 강화 : root 가 아닌 전용 계정 + 시스템 디렉터리 쓰기 금지
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

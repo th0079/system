@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}메인 · 3-Tier 로그인 서비스{% endblock %}
+{% block content %}
+<section class="card wide">
+  <div class="card-head">
+    <div>
+      <h1>{{ user.name }}님, 환영합니다!</h1>
+      <p class="sub">ID/PW 로그인에 성공했습니다. 아래는 이 화면을 만들기 위해 요청이 거쳐 온 3개 계층입니다.</p>
+    </div>
+    <form method="post" action="/logout">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn btn-outline">로그아웃</button>
+    </form>
+  </div>
+  {% include "_flashes.html" %}
+
+  <div class="tier-flow">
+    <div class="tier web">
+      <span class="tag">① Presentation · Web</span>
+      <strong>{{ tiers.web.name }}</strong>
+      <small>{{ tiers.web.detail }}</small>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="tier was">
+      <span class="tag">② Application · WAS</span>
+      <strong>{{ tiers.was.name }}</strong>
+      <small>{{ tiers.was.detail }}</small>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="tier db">
+      <span class="tag">③ Data · DB</span>
+      <strong>{{ tiers.db.name }}</strong>
+      <small>{{ tiers.db.detail }}</small>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h2>내 계정 <small>users 테이블</small></h2>
+      <dl class="info">
+        <dt>아이디</dt><dd>{{ user.username }}</dd>
+        <dt>이름</dt><dd>{{ user.name }}</dd>
+        <dt>가입일</dt><dd>{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+        <dt>최근 로그인</dt>
+        <dd>{{ user.last_login_at.strftime('%Y-%m-%d %H:%M:%S') if user.last_login_at else '-' }}</dd>
+      </dl>
+    </div>
+    <div>
+      <h2>최근 로그인 기록 <small>login_logs 테이블</small></h2>
+      <table class="logs">
+        <thead><tr><th>시각</th><th>접속 IP</th><th>결과</th></tr></thead>
+        <tbody>
+          {% for log in logs %}
+          <tr>
+            <td>{{ log.created_at.strftime('%m-%d %H:%M:%S') }}</td>
+            <td>{{ log.ip_address }}</td>
+            <td>{% if log.success %}<span class="ok">성공</span>{% else %}<span class="ng">실패</span>{% endif %}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3">기록 없음</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

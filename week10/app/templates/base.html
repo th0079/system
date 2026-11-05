@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}3-Tier 로그인 서비스{% endblock %}</title>
+  <!-- CSS 는 Web Tier(Nginx)가 /var/www/loginapp/static 에서 직접 제공 -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="logo">3T</span>3-Tier Login Service</a>
+    <nav class="tier-badges" aria-label="구성 계층">
+      <span class="badge web">Web · Nginx</span>
+      <span class="badge was">WAS · Flask</span>
+      <span class="badge db">DB · MariaDB</span>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">Linux VM · Nginx(:80) → Gunicorn/Flask(127.0.0.1:8000) → MariaDB(127.0.0.1:3306)</footer>
+</body>
+</html>

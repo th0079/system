@@ -1,0 +1,5 @@
+# WAS Tier Python 패키지
+# 범위로 지정해서 VM 의 Python 버전(3.9~3.13)에 맞는 최신 호환 버전이 설치되게 한다.
+Flask>=3.0,<4
+gunicorn>=22,<27
+PyMySQL>=1.1,<2
